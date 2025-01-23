@@ -1,4 +1,5 @@
 const args = process.argv.slice(2);
+const password = generatePassword();
 
 
 function generatePassword(length = 8) {
@@ -10,3 +11,5 @@ function generatePassword(length = 8) {
     }
     return password;
 }
+
+console.log(password);
