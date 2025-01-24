@@ -7,8 +7,37 @@ let includeUppercase = false;
 let includeNumbers = false;
 let includeSymbols = false;
 
+// Function to display help message
+const displayHelp = () => {
+    console.log(`
+    Welcome to Password Generator
+    
+    Usage: node index.js [options]
+    Options:
+    --help          Show help message
+    --length <num>  Specify the length of the password
+    --uppercase     Include uppercase letters
+    --numbers       Include numbers
+    --symbols       Include symbols
+
+    If no option selected, password assumes default: 
+        length = 8, all lowercase
+
+    Multiple options may be used at once
+    ex: 
+        node index.js --uppercase --numbers 
+            Generates password with both uppercase and numbers implemented
+    `);
+};
+
 // Set-up switch for user to flag preferred features
 args.forEach((arg, index) => {
+    if (arg.startsWith('-') && !arg.startsWith('--')) {
+        console.error(`Incorrect format: ${arg}. Use double dashes (--) for options.`);
+        displayHelp();
+        process.exit(1);
+    }
+
     switch (arg) {
         case '--help':
             displayHelp();
@@ -18,6 +47,7 @@ args.forEach((arg, index) => {
                 length = parseInt(args[index + 1], 10);
             } else {
                 console.error('Please provide a valid number for the length.');
+                displayHelp();
                 process.exit(1);
             }
             break;
@@ -55,35 +85,13 @@ const generatePassword = (length = 8, options = {}) => {
 };
 
 // Generate the password with the specified options
-// Moved this as it was causing issues, "cannot access length before initialization"
 const password = generatePassword(length, {
     includeUppercase,
     includeNumbers,
     includeSymbols
 });
 
-// Function to display help message
-const displayHelp = () => {
-    console.log(`
-    Welcome to Password Generator
-    
-    Usage: node index.js [options]
-    Options:
-    --help          Show help message
-    --length <num>  Specify the length of the password
-    --uppercase     Include uppercase letters
-    --numbers       Include numbers
-    --symbols       Include symbols
 
-    If no option selected, password assumes default: 
-        length = 8, all lowercase
-
-    Multiple options may be used at once
-    ex: 
-        node index.js --uppercase --numbers 
-            Generates password with both uppercase and numbers implemented
-    `);
-};
 
 // Display the generated password
 console.log(`Generated password: ${password}`);
